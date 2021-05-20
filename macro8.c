@@ -18,7 +18,7 @@ int macro8(){
     format_line(&gaussian,kRed,2);
 
     TF1 gausppar("gausppar",the_gausppar,100,160,6);
-    double a=-0.06; double b=41; double c=80;
+    double a=-0.06; double b=41; double c=800;
     double norm=3; double mean=125; double sigma=1.6;
     gausppar.SetParameters(norm,mean,sigma,a,b,c);
     gausppar.SetParNames("Norm","Mean","Sigma","a","b","c");
@@ -27,17 +27,18 @@ int macro8(){
     TH1F histo("histo","Signal plus background;X vals;Y Vals",50,100,160);
     histo.SetMarkerStyle(8);
 
-    // Fake the data
+    // Fake the dat
+//    gRandom->SetSeed(0);
     for (int i=1;i<=5000;++i) histo.Fill(gausppar.GetRandom());
 
     // Reset the parameters before the fit and set
     // by eye a peak at 6 with an area of more or less 50
     gausppar.SetParameter(0,4);
-    gausppar.SetParameter(1,126);
-    gausppar.SetParameter(2,1.8);
+    gausppar.SetParLimits(1,120,130);
+    gausppar.SetParLimits(2,0,5);
     gausppar.SetParameter(3,-0.1);
-    gausppar.SetParameter(4,64);
-    gausppar.SetParameter(5,80);
+    gausppar.FixParameter(4,41);
+    gausppar.SetParameter(5,800);
 
 //    int npar=gausppar.GetNpar();
 //    for (int ipar=2;ipar<npar;++ipar) gausppar.SetParameter(ipar,1);
